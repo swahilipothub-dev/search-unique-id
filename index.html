@@ -1,205 +1,77 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width,initial-scale=1">
-    <title>Swahilipot ID Finder</title>
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
-    <style>
-        :root {
-            --bg: #0b0c0f;
-            --panel: #151820;
-            --text: #e7eaf0;
-            --muted: #a6adbb;
-            --accent: #5aa9ff;
-            --ok: #20c997;
-            --warn: #ffc107;
-        }
-
-        * {
-            box-sizing: border-box;
-            font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial;
-        }
-
-        body {
-            margin: 0;
-            background: linear-gradient(180deg, #0b0c0f 0%, #0e1117 100%);
-            color: var(--text);
-        }
-
-        .wrap {
-            max-width: 980px;
-            margin: 32px auto;
-            padding: 0 16px;
-        }
-
-        .card {
-            background: var(--panel);
-            border: 1px solid #232838;
-            border-radius: 14px;
-            padding: 20px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, .25);
-        }
-
-        h1 {
-            font-size: 20px;
-            margin: 0 0 16px;
-        }
-
-        .grid {
-            display: grid;
-            gap: 14px;
-            grid-template-columns: 1fr;
-        }
-
-        .row {
-            display: flex;
-            gap: 12px;
-            flex-wrap: wrap;
-        }
-
-        .field {
-            flex: 1 1 220px;
-            display: flex;
-            flex-direction: column;
-            gap: 6px;
-        }
-
-        label {
-            font-size: 12px;
-            color: var(--muted);
-            letter-spacing: .02em;
-        }
-
-        input[type="text"] {
-            background: #0f1320;
-            color: var(--text);
-            border: 1px solid #2a3042;
-            border-radius: 10px;
-            padding: 12px 12px;
-            outline: none;
-            width: 100%;
-        }
-
-        .btn {
-            background: var(--accent);
-            color: #071019;
-            border: 0;
-            border-radius: 10px;
-            padding: 12px 16px;
-            font-weight: 600;
-            cursor: pointer;
-        }
-
-        .btn.secondary {
-            background: #232838;
-            color: var(--text);
-            border: 1px solid #2a3042;
-        }
-
-        .btn:disabled {
-            opacity: .6;
-            cursor: not-allowed;
-        }
-
-        .status {
-            margin-top: 10px;
-            font-size: 13px;
-            color: var(--muted);
-        }
-
-        .result {
-            margin-top: 18px;
-        }
-
-        .pill {
-            display: inline-block;
-            padding: 6px 10px;
-            border-radius: 999px;
-            font-size: 12px;
-            border: 1px solid #2a3042;
-            background: #0f1320;
-            color: var(--muted);
-        }
-
-        table {
-            width: 100%;
-            border-collapse: separate;
-            border-spacing: 0;
-            margin-top: 10px;
-        }
-
-        th,
-        td {
-            text-align: left;
-            padding: 12px;
-        }
-
-        thead th {
-            font-size: 12px;
-            color: var(--muted);
-            border-bottom: 1px solid #2a3042;
-        }
-
-        tbody tr {
-            border-bottom: 1px solid #22283a;
-        }
-
-        tbody tr:hover {
-            background: #0f1320;
-        }
-
-        .warn {
-            color: var(--warn);
-        }
-
-        .footer {
-            margin-top: 10px;
-            font-size: 12px;
-            color: var(--muted);
-        }
-
-        @media (min-width:720px) {
-            .grid.two {
-                grid-template-columns: 1fr 1fr;
-            }
-        }
-    </style>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Swahilipot ID Finder</title>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+<style>
+  :root { --bg:#0b0c0f; --panel:#151820; --text:#e7eaf0; --muted:#a6adbb; --accent:#5aa9ff; --ok:#20c997; --warn:#ffc107; }
+  * { box-sizing:border-box; font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial; }
+  body { margin:0; background:linear-gradient(180deg,#0b0c0f 0%, #0e1117 100%); color:var(--text); }
+  .wrap { max-width:980px; margin:32px auto; padding:0 16px; text-align:center; }
+  .card { background:var(--panel); border:1px solid #232838; border-radius:14px; padding:20px; box-shadow:0 10px 30px rgba(0,0,0,.25); }
+  h1 { font-size:22px; margin:0 0 8px; }
+  .sub { font-size:13px; color:var(--muted); margin-bottom:16px; }
+  .notice { background:#0f1320; border:1px solid #2a3042; border-radius:12px; padding:12px; margin:12px 0 6px; font-size:14px; }
+  .notice a { color:var(--accent); text-decoration:none; }
+  .grid { display:grid; gap:14px; grid-template-columns:1fr; justify-items:center; }
+  .row { display:flex; gap:12px; flex-wrap:wrap; justify-content:center; }
+  .field { width:100%; max-width:420px; display:flex; flex-direction:column; gap:6px; align-items:center; }
+  label { font-size:12px; color:var(--muted); letter-spacing:.02em; align-self:flex-start; }
+  input[type="text"] { background:#0f1320; color:var(--text); border:1px solid #2a3042; border-radius:10px; padding:12px 12px; outline:none; width:100%; text-align:center; }
+  .btn { background:var(--accent); color:#071019; border:0; border-radius:10px; padding:12px 16px; font-weight:600; cursor:pointer; }
+  .btn.secondary { background:#232838; color:var(--text); border:1px solid #2a3042; }
+  .status { margin-top:8px; font-size:13px; color:var(--muted); }
+  .result { margin-top:18px; }
+  .pill { display:inline-block; padding:6px 10px; border-radius:999px; font-size:12px; border:1px solid #2a3042; background:#0f1320; color:var(--muted); }
+  .cards { display:grid; gap:14px; grid-template-columns:repeat(auto-fit,minmax(260px,1fr)); margin-top:10px; }
+  .r-card { background:#0f1320; border:1px solid #2a3042; border-radius:14px; padding:16px; text-align:center; }
+  .r-id { font-weight:700; font-size:16px; margin-bottom:6px; }
+  .r-name { font-size:14px; color:var(--text); margin-bottom:8px; }
+  .r-meta { font-size:13px; color:var(--muted); line-height:1.5; }
+  .badge { display:inline-block; margin-top:10px; padding:6px 10px; border-radius:999px; border:1px solid #2a3042; font-size:12px; }
+  .warn { color:var(--warn); }
+  .footer { margin-top:12px; font-size:12px; color:var(--muted); }
+  .disclaimer { margin-top:14px; font-size:12px; color:var(--muted); opacity:.85; text-align:center; border-top:1px dashed #2a3042; padding-top:10px; }
+  @media (min-width:720px) { .grid.two { grid-template-columns:1fr 1fr; } }
+</style>
 </head>
-
 <body>
-    <div class="wrap">
-        <div class="card">
-            <h1>Swahilipot ID Finder</h1>
-            <div class="grid two">
-                <div>
-                    <div class="status" id="loadedCount"></div>
-                </div>
-                <div>
-                    <div class="field">
-                        <label>First or Last Name</label>
-                        <input id="nameInput" type="text" placeholder="Lucy or Mwangi">
-                    </div>
-                    <div class="field">
-                        <label>Email or Phone Number</label>
-                        <input id="contactInput" type="text" placeholder="mwangilucy2282@gmail.com or 0743...">
-                    </div>
-                    <div class="row" style="margin-top:10px">
-                        <button id="searchBtn" class="btn">Search</button>
-                        <button id="clearBtn" class="btn secondary">Clear</button>
-                        <span id="searchStatus" class="status"></span>
-                    </div>
-                </div>
-            </div>
-            <div class="result" id="result"></div>
-            <div class="footer">Match rule: Name must match First or Last, and Contact must match Email or Phone.
-                Case-insensitive; phone matching ignores spaces and symbols.</div>
-        </div>
-    </div>
+  <div class="wrap">
+    <div class="card">
+      <h1>Swahilipot ID Finder</h1>
+      <div class="sub">Enter your name and email or phone to find your Unique ID</div>
+      <div class="notice">
+        please use your unique ID to check in for today's orientation:
+        <a href="https://docs.google.com/forms/d/1ioyJHrZgxJVoGKtJQY1lpU_7z0cdITmtDv9gbfWuH-I/viewform?edit_requested=true" target="_blank" rel="noopener">Open Check-In Form</a>
+      </div>
 
-    <script id="seed" type="text/plain">
+      <div class="grid">
+        <div class="status" id="loadedCount"></div>
+        <div class="field">
+          <label>First or Last Name</label>
+          <input id="nameInput" type="text" placeholder="Lucy or Mwangi">
+        </div>
+        <div class="field">
+          <label>Email or Phone Number</label>
+          <input id="contactInput" type="text" placeholder="mwangilucy2282@gmail.com or 0743...">
+        </div>
+        <div class="row">
+          <button id="searchBtn" class="btn">Search</button>
+          <button id="clearBtn" class="btn secondary">Clear</button>
+        </div>
+        <div id="searchStatus" class="status"></div>
+      </div>
+
+      <div class="result" id="result"></div>
+      <div class="footer">Match rule: Name must match First or Last, and Contact must match Email or Phone. Case-insensitive; phone matching ignores spaces and symbols.</div>
+      <div class="disclaimer">This simply smart site was vibe coded by Chris Achinga while sitting dangerously on a wall.</div>
+    </div>
+  </div>
+
+<script id="seed" type="text/plain">
 SWAHILIPOT ID(UNIQUE ID)	First Name	Middle Name	Last Name	Phone Number	Email	DEPARTMENT/PROGRAM ASSIGNED
 SPH-IAS-000	Basil	Kyende	Mutuku	0110665688	basil59mutuku@gmail.com	TECH & DATA
 SPH-IAS-001	Mohamed 	Farid	Mohamed 		faridmuha90@gmail.com	FINANCE
@@ -334,117 +206,122 @@ SPH-IAS-129	Gloria	Kangai	Mugendi	0750974485/0745285848	gloriakangai251@gmail.co
 SPH-IAS-130	Khadija	Mbarak	Athman	0710983445	Mbarakkhadija3@gmail.com	TECH & DATA
 </script>
 
-    <script>
-        const state = { rows: [] };
+<script>
+  const state = { rows: [] };
 
-        function detectDelimiter(headerLine) {
-            if ((headerLine.match(/\t/g) || []).length >= (headerLine.match(/,/g) || []).length) return "\t";
-            return ",";
-        }
+  function detectDelimiter(headerLine) {
+    if ((headerLine.match(/\t/g) || []).length >= (headerLine.match(/,/g) || []).length) return "\t";
+    return ",";
+  }
 
-        function parse(text) {
-            const lines = text.split(/\r?\n/).filter(l => l.trim().length > 0);
-            if (!lines.length) return [];
-            const delim = detectDelimiter(lines[0]);
-            const split = l => l.split(delim).map(s => s.trim());
-            const headers = split(lines[0]);
-            const idx = {
-                id: headers.findIndex(h => /id/i.test(h)),
-                first: headers.findIndex(h => /first\s*name/i.test(h)),
-                middle: headers.findIndex(h => /middle\s*name/i.test(h)),
-                last: headers.findIndex(h => /last\s*name/i.test(h)),
-                phone: headers.findIndex(h => /phone/i.test(h)),
-                email: headers.findIndex(h => /email/i.test(h)),
-                dept: headers.findIndex(h => /department|program/i.test(h))
-            };
-            const rows = [];
-            for (let i = 1; i < lines.length; i++) {
-                const cols = split(lines[i]);
-                const id = (idx.id >= 0 ? cols[idx.id] : "").trim();
-                if (!/^SPH-IAS-\d{3}$/.test(id)) continue;
-                rows.push({
-                    id,
-                    first: (idx.first >= 0 ? cols[idx.first] : "").trim(),
-                    middle: (idx.middle >= 0 ? cols[idx.middle] : "").trim(),
-                    last: (idx.last >= 0 ? cols[idx.last] : "").trim(),
-                    phone: (idx.phone >= 0 ? cols[idx.phone] : "").trim(),
-                    email: (idx.email >= 0 ? cols[idx.email] : "").trim(),
-                    dept: (idx.dept >= 0 ? cols[idx.dept] : "").trim()
-                });
-            }
-            return rows;
-        }
+  function parse(text) {
+    const lines = text.split(/\r?\n/).filter(l => l.trim().length > 0);
+    if (!lines.length) return [];
+    const delim = detectDelimiter(lines[0]);
+    const split = l => l.split(delim).map(s => s.trim());
+    const headers = split(lines[0]);
+    const idx = {
+      id: headers.findIndex(h => /id/i.test(h)),
+      first: headers.findIndex(h => /first\s*name/i.test(h)),
+      middle: headers.findIndex(h => /middle\s*name/i.test(h)),
+      last: headers.findIndex(h => /last\s*name/i.test(h)),
+      phone: headers.findIndex(h => /phone/i.test(h)),
+      email: headers.findIndex(h => /email/i.test(h)),
+      dept: headers.findIndex(h => /department|program/i.test(h))
+    };
+    const rows = [];
+    for (let i = 1; i < lines.length; i++) {
+      const cols = split(lines[i]);
+      const id = (idx.id >= 0 ? cols[idx.id] : "").trim();
+      if (!/^SPH-IAS-\d{3}$/.test(id)) continue;
+      rows.push({
+        id,
+        first: (idx.first >= 0 ? cols[idx.first] : "").trim(),
+        middle: (idx.middle >= 0 ? cols[idx.middle] : "").trim(),
+        last: (idx.last >= 0 ? cols[idx.last] : "").trim(),
+        phone: (idx.phone >= 0 ? cols[idx.phone] : "").trim(),
+        email: (idx.email >= 0 ? cols[idx.email] : "").trim(),
+        dept: (idx.dept >= 0 ? cols[idx.dept] : "").trim()
+      });
+    }
+    return rows;
+  }
 
-        function normalizePhone(s) {
-            return (s || "").replace(/[^\d]/g, "");
-        }
+  function normalizePhone(s) {
+    return (s || "").replace(/[^\d]/g, "");
+  }
 
-        function nameMatches(rec, query) {
-            const q = query.trim().toLowerCase();
-            if (!q) return false;
-            const f = (rec.first || "").toLowerCase();
-            const l = (rec.last || "").toLowerCase();
-            return f.includes(q) || l.includes(q);
-        }
+  function nameMatches(rec, query) {
+    const q = query.trim().toLowerCase();
+    if (!q) return false;
+    const f = (rec.first || "").toLowerCase();
+    const l = (rec.last || "").toLowerCase();
+    return f.includes(q) || l.includes(q);
+  }
 
-        function contactMatches(rec, query) {
-            const q = query.trim();
-            if (!q) return false;
-            if (q.includes("@")) {
-                const re = (rec.email || "").toLowerCase();
-                return re === q.toLowerCase() || re.includes(q.toLowerCase());
-            } else {
-                const rq = normalizePhone(q);
-                const rp = normalizePhone(rec.phone || "");
-                if (!rq || !rp) return false;
-                return rp.endsWith(rq) || rp === rq || rp.includes(rq);
-            }
-        }
+  function contactMatches(rec, query) {
+    const q = query.trim();
+    if (!q) return false;
+    if (q.includes("@")) {
+      const re = (rec.email || "").toLowerCase();
+      return re === q.toLowerCase() || re.includes(q.toLowerCase());
+    } else {
+      const rq = normalizePhone(q);
+      const rp = normalizePhone(rec.phone || "");
+      if (!rq || !rp) return false;
+      return rp.endsWith(rq) || rp === rq || rp.includes(rq);
+    }
+  }
 
-        function renderTable(rows) {
-            const esc = s => String(s ?? "").replace(/[&<>"']/g, m => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[m]));
-            let html = '<div class="row" style="align-items:center;gap:8px;margin-bottom:6px"><span class="pill">Results: ' + rows.length + '</span></div>';
-            html += '<table><thead><tr><th>Unique ID</th><th>Name</th><th>Phone</th><th>Email</th><th>Department</th></tr></thead><tbody>';
-            for (const r of rows) {
-                const name = [r.first, r.middle, r.last].filter(Boolean).join(" ");
-                html += '<tr><td><strong>' + esc(r.id) + '</strong></td><td>' + esc(name) + '</td><td>' + esc(r.phone) + '</td><td>' + esc(r.email) + '</td><td>' + esc(r.dept) + '</td></tr>';
-            }
-            html += '</tbody></table>';
-            return html;
-        }
+  function renderCards(rows) {
+    const esc = s => String(s ?? "").replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
+    let html = '<div style="margin-bottom:8px;"><span class="pill">Results: ' + rows.length + '</span></div>';
+    html += '<div class="cards">';
+    for (const r of rows) {
+      const name = [r.first, r.middle, r.last].filter(Boolean).join(" ");
+      html += '<div class="r-card">'
+            +   '<div class="r-id">' + esc(r.id) + '</div>'
+            +   '<div class="r-name">' + esc(name) + '</div>'
+            +   '<div class="r-meta">' + esc(r.phone) + '</div>'
+            +   '<div class="r-meta">' + esc(r.email) + '</div>'
+            +   '<div class="badge">' + esc(r.dept || 'N/A') + '</div>'
+            + '</div>';
+    }
+    html += '</div>';
+    return html;
+  }
 
-        function setLoadedStatus() {
-            const el = document.getElementById("loadedCount");
-            el.textContent = state.rows.length ? "Loaded " + state.rows.length + " records" : "";
-        }
+  function setLoadedStatus() {
+    const el = document.getElementById("loadedCount");
+    el.textContent = state.rows.length ? "Loaded " + state.rows.length + " records" : "";
+  }
 
-        function init() {
-            const seed = document.getElementById("seed").textContent;
-            state.rows = parse(seed);
-            setLoadedStatus();
-        }
+  function init() {
+    const seed = document.getElementById("seed").textContent;
+    state.rows = parse(seed);
+    setLoadedStatus();
+  }
 
-        document.getElementById("searchBtn").addEventListener("click", () => {
-            const nameQ = document.getElementById("nameInput").value;
-            const contactQ = document.getElementById("contactInput").value;
-            if (!state.rows.length) { alert("Dataset not loaded."); return; }
-            if (!nameQ.trim() || !contactQ.trim()) { alert("Enter both Name and Email/Phone."); return; }
-            const rows = state.rows.filter(r => nameMatches(r, nameQ) && contactMatches(r, contactQ));
-            const res = document.getElementById("result");
-            if (!rows.length) res.innerHTML = '<div class="warn">No match found.</div>';
-            else res.innerHTML = renderTable(rows);
-            document.getElementById("searchStatus").textContent = rows.length ? "Done" : "No results";
-        });
+  document.getElementById("searchBtn").addEventListener("click", () => {
+    const nameQ = document.getElementById("nameInput").value;
+    const contactQ = document.getElementById("contactInput").value;
+    if (!state.rows.length) { alert("Dataset not loaded."); return; }
+    if (!nameQ.trim() || !contactQ.trim()) { alert("Enter both Name and Email/Phone."); return; }
+    const rows = state.rows.filter(r => nameMatches(r, nameQ) && contactMatches(r, contactQ));
+    const res = document.getElementById("result");
+    if (!rows.length) res.innerHTML = '<div class="warn">No match found.</div>';
+    else res.innerHTML = renderCards(rows);
+    document.getElementById("searchStatus").textContent = rows.length ? "Done" : "No results";
+  });
 
-        document.getElementById("clearBtn").addEventListener("click", () => {
-            document.getElementById("nameInput").value = "";
-            document.getElementById("contactInput").value = "";
-            document.getElementById("result").innerHTML = "";
-            document.getElementById("searchStatus").textContent = "";
-        });
+  document.getElementById("clearBtn").addEventListener("click", () => {
+    document.getElementById("nameInput").value = "";
+    document.getElementById("contactInput").value = "";
+    document.getElementById("result").innerHTML = "";
+    document.getElementById("searchStatus").textContent = "";
+  });
 
-        init();
-    </script>
+  init();
+</script>
 </body>
-
 </html>
