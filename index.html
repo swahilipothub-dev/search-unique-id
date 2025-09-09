@@ -1,0 +1,450 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>Swahilipot ID Finder</title>
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #0b0c0f;
+            --panel: #151820;
+            --text: #e7eaf0;
+            --muted: #a6adbb;
+            --accent: #5aa9ff;
+            --ok: #20c997;
+            --warn: #ffc107;
+        }
+
+        * {
+            box-sizing: border-box;
+            font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial;
+        }
+
+        body {
+            margin: 0;
+            background: linear-gradient(180deg, #0b0c0f 0%, #0e1117 100%);
+            color: var(--text);
+        }
+
+        .wrap {
+            max-width: 980px;
+            margin: 32px auto;
+            padding: 0 16px;
+        }
+
+        .card {
+            background: var(--panel);
+            border: 1px solid #232838;
+            border-radius: 14px;
+            padding: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, .25);
+        }
+
+        h1 {
+            font-size: 20px;
+            margin: 0 0 16px;
+        }
+
+        .grid {
+            display: grid;
+            gap: 14px;
+            grid-template-columns: 1fr;
+        }
+
+        .row {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .field {
+            flex: 1 1 220px;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        label {
+            font-size: 12px;
+            color: var(--muted);
+            letter-spacing: .02em;
+        }
+
+        input[type="text"] {
+            background: #0f1320;
+            color: var(--text);
+            border: 1px solid #2a3042;
+            border-radius: 10px;
+            padding: 12px 12px;
+            outline: none;
+            width: 100%;
+        }
+
+        .btn {
+            background: var(--accent);
+            color: #071019;
+            border: 0;
+            border-radius: 10px;
+            padding: 12px 16px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .btn.secondary {
+            background: #232838;
+            color: var(--text);
+            border: 1px solid #2a3042;
+        }
+
+        .btn:disabled {
+            opacity: .6;
+            cursor: not-allowed;
+        }
+
+        .status {
+            margin-top: 10px;
+            font-size: 13px;
+            color: var(--muted);
+        }
+
+        .result {
+            margin-top: 18px;
+        }
+
+        .pill {
+            display: inline-block;
+            padding: 6px 10px;
+            border-radius: 999px;
+            font-size: 12px;
+            border: 1px solid #2a3042;
+            background: #0f1320;
+            color: var(--muted);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0;
+            margin-top: 10px;
+        }
+
+        th,
+        td {
+            text-align: left;
+            padding: 12px;
+        }
+
+        thead th {
+            font-size: 12px;
+            color: var(--muted);
+            border-bottom: 1px solid #2a3042;
+        }
+
+        tbody tr {
+            border-bottom: 1px solid #22283a;
+        }
+
+        tbody tr:hover {
+            background: #0f1320;
+        }
+
+        .warn {
+            color: var(--warn);
+        }
+
+        .footer {
+            margin-top: 10px;
+            font-size: 12px;
+            color: var(--muted);
+        }
+
+        @media (min-width:720px) {
+            .grid.two {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="wrap">
+        <div class="card">
+            <h1>Swahilipot ID Finder</h1>
+            <div class="grid two">
+                <div>
+                    <div class="status" id="loadedCount"></div>
+                </div>
+                <div>
+                    <div class="field">
+                        <label>First or Last Name</label>
+                        <input id="nameInput" type="text" placeholder="Lucy or Mwangi">
+                    </div>
+                    <div class="field">
+                        <label>Email or Phone Number</label>
+                        <input id="contactInput" type="text" placeholder="mwangilucy2282@gmail.com or 0743...">
+                    </div>
+                    <div class="row" style="margin-top:10px">
+                        <button id="searchBtn" class="btn">Search</button>
+                        <button id="clearBtn" class="btn secondary">Clear</button>
+                        <span id="searchStatus" class="status"></span>
+                    </div>
+                </div>
+            </div>
+            <div class="result" id="result"></div>
+            <div class="footer">Match rule: Name must match First or Last, and Contact must match Email or Phone.
+                Case-insensitive; phone matching ignores spaces and symbols.</div>
+        </div>
+    </div>
+
+    <script id="seed" type="text/plain">
+SWAHILIPOT ID(UNIQUE ID)	First Name	Middle Name	Last Name	Phone Number	Email	DEPARTMENT/PROGRAM ASSIGNED
+SPH-IAS-000	Basil	Kyende	Mutuku	0110665688	basil59mutuku@gmail.com	TECH & DATA
+SPH-IAS-001	Mohamed 	Farid	Mohamed 		faridmuha90@gmail.com	FINANCE
+SPH-IAS-002	Richard 		Makupe	0714118186	makuperichard@gmail.com	COMMS
+SPH-IAS-003	LUCY 	Wangari 	Mwangi 	0743618770	mwangilucy2282@gmail.com	CASE MANAGEMENT
+SPH-IAS-004	Mohammed	Salim	Mohammed	0743183964	mosalim5500@gmail.com	FINANCE
+SPH-IAS-005	Adelight	Wanjiru	Ngugi	0742491189	adelightngugi@gmail.com	COMMS
+SPH-IAS-006	Fahan	Mohamed 	Ali	0799801370	fahanmohd338@gmail.com	ENTREPRENEURSHIP
+SPH-IAS-007	Harun 	Muriuki 	Isaac	0797433600	haronisaac51@gmail.com	TECH & DATA
+SPH-IAS-008	Zawadi	Juma	Beba	0799394165	zawadijuma552@gmail.com	HEALTH
+SPH-IAS-009	Ouma	George 	Nalo	0713417351	nalogeorge9@gmail.com	TECH & DATA
+SPH-IAS-010	EMMY 	KINYANDI 	KINDUGWA 	0719516448	ekindungwa13@gmail.com	TECH & DATA
+SPH-IAS-011	Zainab 	Bilal 	Hussein 	0780049748	zainabbilal833@gmail.com	COMMS
+SPH-IAS-012	Faith	Zighe	Msagha	0793507771	octaviahzighe106@gmail.com	ADMIN AND HR
+SPH-IAS-013	Jacob 	Ombati	Gitenya	0707447658	jacobombati4@gmail.com	TECH & DATA
+SPH-IAS-014	Cynthia 	Wanjiru 	Wairimu 	0768900297	Cynthiawairimu2309@gmail.com	HEALTH
+SPH-IAS-015	CHELSEY 	GESARE 	ONTIERI 	0708802973	gesarechelsey@gmail.com	TECH & DATA
+SPH-IAS-016	Lance	Miheso	MUHAMBI	0790044050	18884@ttnp.ac.ke	TECH & DATA
+SPH-IAS-017	CHRISTINE	BAHATI	MAGDALENE	0702010223	christinebahati6@gmail.com	TECH & DATA
+SPH-IAS-018	Gregory 	Nashon 	Nyaidho 	0799893789	nyaidhogreg25@gmail.com	COMMS
+SPH-IAS-019	Rian	Akinyi	Onyango 	0117117043	riangabriela934@gmail.com	TECH & DATA
+SPH-IAS-020	Adnan 	Alwy 	Zaina 	+254788550919	adnanalwy66@gmail.com	HERITAGE
+SPH-IAS-021	Akhekani 	Vivian 	Joy	0719441969	vivianjoy1226@gmail.com	PARTNERSHIPS
+SPH-IAS-022	Brian	Ngana	Mwadiga	0703771488	brianngana3@gmail.com	COMMS
+SPH-IAS-023	Johnson 	Otieno	Mujan	0111988372	johnsonmujan@iCloud.com	COMMS
+SPH-IAS-024	Abubakar 	Mwita 	Sasi	0745188908	abubakarmwita24@gmail.com	COMMUNITY
+SPH-IAS-025	Fawziya 	Jamal	Said	0110278069	Fawziyaj5@gmail.com	CREATIVES
+SPH-IAS-026	Kibibi 	Riziki	Fundi	0737141366	rizikikibibi43@gmail.com	COMMUNITY
+SPH-IAS-027	Otieno 	Christine 	Anyango 	0708867092	christineanyango296@gmail.com	COMMS
+SPH-IAS-028	Monica 	Kariandigu	Kaugi 	0740623162	monicakaugi180@gmail.com	CASE MANAGEMENT
+SPH-IAS-029	DIXON	NGOJI	KIRIGHA	0111336304	dixonkirigha@gmail.com	ENTREPRENEURSHIP
+SPH-IAS-030	Stella 	Rasoa	Ndundi	0704378282	stellahras002@gmail.com	HEALTH
+SPH-IAS-031	Firdaus 	Salim	Motila	0710350808	Firdausuleiman8@gmail.com	HEALTH
+SPH-IAS-032	Justus 	Kipchumba 	Kemei	0729620398	justuskipchumba29@gmail.com	TECH & DATA
+SPH-IAS-033	PRECIOUS	MLAA	KHAMISI	0792185623	preciousmlaa2003@gmail.com	FINANCE
+SPH-IAS-034	Naim Muhammad 	Omar	Al amoudy	0111890382	naimmuhammad@gmail.com	CREATIVES
+SPH-IAS-035	Cleophas		Ekuwom	0792860062	cleoekuwom96@gmail.com	TECH & DATA
+SPH-IAS-036	Thadeus 	Otieno 	Onyango 	+254792064134	tehdotieno@gmail.com	CREATIVES
+SPH-IAS-037	Anne	Nafula	Nyongesa	0795728946	annenyongesa54@gmail.com	ADMIN AND HR
+SPH-IAS-038	Gideon 		Ndoro 	0795738512	ndorogideon23@gmail.com	TECH & DATA
+SPH-IAS-039	Rehema 		Rajab	0794 528 958 	rajabrehema004@gmail.com	ADMIN AND HR
+SPH-IAS-040	Francis 	Nyakoe 	Ongeri 	0741442733	francisnyakoe04@gmail.com	CREATIVES
+SPH-IAS-041	Bentar 	Achieng	Joshua	0768850419	Bentarjoshua@gmail.com	HEALTH
+SPH-IAS-042	MaryAnn	Muthoni 	Nderitu 	0700225755	aryanmuthoni@gmail.com	CASE MANAGEMENT
+SPH-IAS-043	Sharifa	Juma	Charo	0748707995	Jumasharifa053@gmail.com	ADMIN AND HR
+SPH-IAS-044	SAMSON 	GANJA 	MAMBO	0795711550	samsonmambo70@gmail.com	CREATIVES
+SPH-IAS-045	Keith	Pasaka 	Kitaka	0702633544	Keithpasaka7@gmail.com	CASE MANAGEMENT
+SPH-IAS-046	Deborah 	Bosibori 	Isoe	0799201318	isoedeborah@gmail.com	EVENTS
+SPH-IAS-047	Beatrice 		Mwikali 	0742861022	sallymwikali02@gmail.com	COMMUNITY
+SPH-IAS-048	JOSEPHINE 	NEKESA	WECHULI 	071183125	wechulijosephine8@gmail.com	CREATIVES
+SPH-IAS-049	Elizabeth 	Rodha 	Otiro	0768665350	psychologistelizabeth9@gmail.com	EVENTS
+SPH-IAS-050	Muhammad 	Khamis	Bakari	0703133434	moddyhermies@gmail.com	COMMS
+SPH-IAS-051	Hawa	Bakari	Chisiwa	0718884372	hawabakarichisiwa60@gmail.com	CASE MANAGEMENT
+SPH-IAS-052	Babie	Thani	Suleiman 	0110001797	babiethanny@gmail.com	CASE MANAGEMENT
+SPH-IAS-053	Ombongi 	Judith 	Moraa	0757258833	ombongijudith242@gmail.com	TECH & DATA
+SPH-IAS-054	Doreen	Furaha	karisa	0711514541	doreenfuraha6@gmail.com	COMMUNITY
+SPH-IAS-055	Titus 	Odhiambo 	Otieno	0794538775	titusodhiambo865@gmail.com	COMMUNITY
+SPH-IAS-056	Linet	Jumwa	Bahati	0740896652	linetjumwa27@gmail.com	CREATIVES
+SPH-IAS-057	John	Mwamburi	Mwakio	0702733718	Mwakiojohn003@gmail.com	COMMUNITY
+SPH-IAS-058	said	hussen	juma	0114539790	saidhusseinjuma2004@gmail.com	CASE MANAGEMENT
+SPH-IAS-059	Stella 	Njoki	Wangui	0796878369	stellangui1235@gmail.com	CASE MANAGEMENT
+SPH-IAS-060						COMMUNITY
+SPH-IAS-061	Fatuma 	Swaleh	Chiserecho	0110680802	chisehfatma@gmail.com	HERITAGE
+SPH-IAS-062	Mercy 	Mwikali 	Mutua	0794 745480 	Mercylynemutua@gmail.com	COMMUNITY
+SPH-IAS-063	Mitchele	Adhiambo	Otieno	0741787496	Mitcheleadhiambo@gmail.com	LEGAL
+SPH-IAS-064	Elizabeth 	Mutheu 	Muendo	0711353328	mutheue001@gmail.com	FINANCE
+SPH-IAS-065	Sharon 	N/A	Vutagwa 	0758972045	Sharonvutagwa6@gmail.com	TECH & DATA
+SPH-IAS-066	Raniar 		Luvai	0796052413	raniarluvai948@gmail.com	COMMS
+SPH-IAS-067	Anna	Akinyi	Onyango	0799552562	Akinyianna05@gmail.com	CREATIVES
+SPH-IAS-068	Jamila	Mansoor	Salim	0790069127	mansoorjamila62@gmail.com	TECH & DATA
+SPH-IAS-069	Austin	Kuria	Maina	+254797561978	kuriaaustin125@gmail.com	TECH & DATA
+SPH-IAS-070	Priscah	Khalayi	Lusweti	0743720124	priscahkhalayi49@gmail.com	CREATIVES
+SPH-IAS-071	Serah	Mutile 	Muthiani	0707928758	Josephserah78@gmail.com	ENTREPRENEURSHIP
+SPH-IAS-072	Husna	Swaleh	Rashid	0108369713	husna@gmail.com	EVENTS
+SPH-IAS-073	Florence  	Achieng 	Ogada	0718477324	florence2007og@gmail.com	COMMS
+SPH-IAS-074	Nyakundi 	Derrick 	Nyachiro	0735748333	nyachirodnyakundi@gmail.com	ENTREPRENEURSHIP
+SPH-IAS-075	Irene 	Murugi	Mithamo	0720035407	irenejosphat2@gmail.com	PARTNERSHIPS
+SPH-IAS-076	Eddison 	Mbega 	Chisiwa 	0757148371	eddisonmbega8@gmail.com	COMMS
+SPH-IAS-077	Lucy	Akamran 	Wafula	0729412035	akamranlucy@gmail.com	COMMUNITY
+SPH-IAS-078	Winfred	Nduku	Nduku	0712 551 583 	Winfrednduku611@gmail.com	EVENTS
+SPH-IAS-079	Fancy 	Chepngetich 	Byegon	0713386704	fancychepngetichbyegon@gmail.com	TECH & DATA
+SPH-IAS-080	sharon 	wangui	ndegwa	0716621535	wanguisharon12@gmail.com	TECH & DATA
+SPH-IAS-081	Lindah		Mugambi	0790584900	lindahmukami796@gmail.com	TECH & DATA
+SPH-IAS-082	Samuel	Osodo	Owiye	0716104252	osodosamuel11@gmail.com	TECH & DATA
+SPH-IAS-083	Valentine 	Wangui 	Mbuthia 	796646899	mbuthiaval@gmail.com	TECH & DATA
+SPH-IAS-084	Grace	Njiru	Njeri	0740099180	njirugrace89@gmail.com	TECH & DATA
+SPH-IAS-085	Kibet	Robert	Kurgat	0714200683	swe.robertkibet@gmail.com	TECH & DATA
+SPH-IAS-086	Denis 	Kalonzo 	Pius 	0706748425	piusdenistech@gmail.com	TECH & DATA
+SPH-IAS-087	Shadrack	Musyoki	Kimaau	0795849775	musyokishadrach1@gmail.com	TECH & DATA
+SPH-IAS-088	Purity	Chebet	Kiyen	0768923292	purity.kiyen@gmail.com	ADMIN AND HR
+SPH-IAS-089	Sey	Wayhive	Achieng	+254799182012	newwayhive@gmail.com	TECH & DATA
+SPH-IAS-090	Cavin		Larry	+254798941735	cavinlarry001@gmail.com	TECH & DATA
+SPH-IAS-091	TRACY	ANYANGO	OCHIENG	0759497011	ochiengtracy60@gmail.com	ENTREPRENEURSHIP
+SPH-IAS-092	Vallary	Atieno	Oluoch	0791942112	atienovallary9@gmail.com	TECH & DATA
+SPH-IAS-093	Samuel	Kimura	Munyua	0114896969	samuelkimuramunyua302@gmail.com	TECH & DATA
+SPH-IAS-094	Bridget 		Cosmus 	+254727059195	bridgetcosmus134@gmail.com	TECH & DATA
+SPH-IAS-095	Mercy 	Mwende 	Kinyua 	0793660085	mercymwendekinyua219@gmail.com	FINANCE
+SPH-IAS-096	Teresia 	Wanjiru 	Mwangi 	0793625310	mwangiteresia651@gmail.com	TECH & DATA
+SPH-IAS-097	Kadzo	Anzazi	Nyale	0714662122	kadzonyale3@gmail.com	EVENTS
+SPH-IAS-098	Brian 	Mutiso	Wambua	0719325911	wambuamutisobrian@zetech.ac.ke	TECH & DATA
+SPH-IAS-099	Maxmilla	Muthoni	Njahira	758294143	Njahiramax@gmail.com	TECH & DATA
+SPH-IAS-100	Faith	Wambui	Peter	0796826314	faithpeter2012@gmail.com	TECH & DATA
+SPH-IAS-101	Christine 	Majala	Ngome	0703105080	ngomechristine29@gmail.com	EVENTS
+SPH-IAS-102	Luckyantony 	Leshan	Maitoyo	+254707169000	luckyantony.leshan@student.moringaschool.com	TECH & DATA
+SPH-IAS-103	Melvin 		Chalwa 	0742828425	chalwamelvin6@gmail.com	TECH & DATA
+SPH-IAS-104	Beyonce 		Nyamoita 	0705528481	beyoncenyamoita3@gmail.com	TECH & DATA
+SPH-IAS-105	Jonathan	Ochieno	Wabwire	0759222180	jonathanochieno329@gmail.com	EVENTS
+SPH-IAS-106	Geoffrey		Owuor	0793525583	geoffreygroovy@gmail.com	CASE MANAGEMENT
+SPH-IAS-107	Faith 	Anyango	Odhiambo	0793921969	odhiambofaith2004@gmail.com	TECH & DATA
+SPH-IAS-108	Edison		Mramba	0740108879	mrambaedison1@gmail.com	TECH & DATA
+SPH-IAS-109	Noor	Hassan	Nur	0768390787	hassannoornur@gmail.com	TECH & DATA
+SPH-IAS-110	Zila	Mkawughanga 	Mdawidah 		zilamkawughanga@gmail.com	CREATIVES
+SPH-IAS-111	Nicholus	Mwatsuma 	Mambo 	0797421488	nicholusmambo1@gmail.com	CASE MANAGEMENT
+SPH-IAS-112	Mariam	Makena 	Mohamed	0116315817	mariammakena2006@gmail.com	HEALTH
+SPH-IAS-113	Dorcas 	Chumba	Simon	0799847541	dorasimon719@gmail.com	TECH & DATA
+SPH-IAS-114	Khadija	Abdulai	Hassan	0718914450	hassankhadijaabdulai@gmail.com	EVENTS
+SPH-IAS-115	Fredrick	Mumu	Munyao	0718903025	fredrickmumu2@gmail.com	TECH & DATA
+SPH-IAS-116	Wahida	Wahid	Ahmed 	0707853123	Wahidawahid796@gmail.com	EVENTS
+SPH-IAS-117	Karisa 	Asia 	Mbuche 	0713735221	asiambuche2000@yahoo.com	EVENTS
+SPH-IAS-118	Natariah	Mumbi 	Kinegeni	0707231360	nataliemumbi45@gmail.com	TECH & DATA
+SPH-IAS-119	Sylvia	Mulekwanthi	Kioko	0791199144	sylviakioko18@gmail.com	PARTNERSHIPS
+SPH-IAS-120	Josephine 	 	Omewoh	0797690339	jomewoh@gmail.com	COMMUNITY
+SPH-IAS-121	Azmi	Adan	Harar	0759471584	azmi.adan2032@gmail.com	TECH & DATA
+SPH-IAS-122	Gard	Alson	Safari	0740046951	alsongadizo@gmail.com	TECH & DATA
+SPH-IAS-123	Zuena	Mwaka	Swaleh	0743182862	zuenaswaleh8@gmail.com	COMMUNITY
+SPH-IAS-124	Nicholas	Ochieng	Olela	0714321564	olelanicolas88@gmail.com	CASE MANAGEMENT
+SPH-IAS-125	Claire	Nafula	 Manyasi	0741948643	clairenafu003@gmail.com	TECH & DATA
+SPH-IAS-126	Nzai	Emmanuel 	Ruwa	0740615901	emmanuelnzai2@gmail.com	TECH & DATA
+SPH-IAS-127	Rubbie	Priscah	Adhiambo	+254794823430	adhiambo7749@gmail.com	CASE MANAGEMENT
+SPH-IAS-128	Agrippinah	Nyabonyi	Bogonko	+254 116 291 269	aggynyabonyi2001@gmail.com	HERITAGE
+SPH-IAS-129	Gloria	Kangai	Mugendi	0750974485/0745285848	gloriakangai251@gmail.com	ENTREPRENEURSHIP
+SPH-IAS-130	Khadija	Mbarak	Athman	0710983445	Mbarakkhadija3@gmail.com	TECH & DATA
+</script>
+
+    <script>
+        const state = { rows: [] };
+
+        function detectDelimiter(headerLine) {
+            if ((headerLine.match(/\t/g) || []).length >= (headerLine.match(/,/g) || []).length) return "\t";
+            return ",";
+        }
+
+        function parse(text) {
+            const lines = text.split(/\r?\n/).filter(l => l.trim().length > 0);
+            if (!lines.length) return [];
+            const delim = detectDelimiter(lines[0]);
+            const split = l => l.split(delim).map(s => s.trim());
+            const headers = split(lines[0]);
+            const idx = {
+                id: headers.findIndex(h => /id/i.test(h)),
+                first: headers.findIndex(h => /first\s*name/i.test(h)),
+                middle: headers.findIndex(h => /middle\s*name/i.test(h)),
+                last: headers.findIndex(h => /last\s*name/i.test(h)),
+                phone: headers.findIndex(h => /phone/i.test(h)),
+                email: headers.findIndex(h => /email/i.test(h)),
+                dept: headers.findIndex(h => /department|program/i.test(h))
+            };
+            const rows = [];
+            for (let i = 1; i < lines.length; i++) {
+                const cols = split(lines[i]);
+                const id = (idx.id >= 0 ? cols[idx.id] : "").trim();
+                if (!/^SPH-IAS-\d{3}$/.test(id)) continue;
+                rows.push({
+                    id,
+                    first: (idx.first >= 0 ? cols[idx.first] : "").trim(),
+                    middle: (idx.middle >= 0 ? cols[idx.middle] : "").trim(),
+                    last: (idx.last >= 0 ? cols[idx.last] : "").trim(),
+                    phone: (idx.phone >= 0 ? cols[idx.phone] : "").trim(),
+                    email: (idx.email >= 0 ? cols[idx.email] : "").trim(),
+                    dept: (idx.dept >= 0 ? cols[idx.dept] : "").trim()
+                });
+            }
+            return rows;
+        }
+
+        function normalizePhone(s) {
+            return (s || "").replace(/[^\d]/g, "");
+        }
+
+        function nameMatches(rec, query) {
+            const q = query.trim().toLowerCase();
+            if (!q) return false;
+            const f = (rec.first || "").toLowerCase();
+            const l = (rec.last || "").toLowerCase();
+            return f.includes(q) || l.includes(q);
+        }
+
+        function contactMatches(rec, query) {
+            const q = query.trim();
+            if (!q) return false;
+            if (q.includes("@")) {
+                const re = (rec.email || "").toLowerCase();
+                return re === q.toLowerCase() || re.includes(q.toLowerCase());
+            } else {
+                const rq = normalizePhone(q);
+                const rp = normalizePhone(rec.phone || "");
+                if (!rq || !rp) return false;
+                return rp.endsWith(rq) || rp === rq || rp.includes(rq);
+            }
+        }
+
+        function renderTable(rows) {
+            const esc = s => String(s ?? "").replace(/[&<>"']/g, m => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[m]));
+            let html = '<div class="row" style="align-items:center;gap:8px;margin-bottom:6px"><span class="pill">Results: ' + rows.length + '</span></div>';
+            html += '<table><thead><tr><th>Unique ID</th><th>Name</th><th>Phone</th><th>Email</th><th>Department</th></tr></thead><tbody>';
+            for (const r of rows) {
+                const name = [r.first, r.middle, r.last].filter(Boolean).join(" ");
+                html += '<tr><td><strong>' + esc(r.id) + '</strong></td><td>' + esc(name) + '</td><td>' + esc(r.phone) + '</td><td>' + esc(r.email) + '</td><td>' + esc(r.dept) + '</td></tr>';
+            }
+            html += '</tbody></table>';
+            return html;
+        }
+
+        function setLoadedStatus() {
+            const el = document.getElementById("loadedCount");
+            el.textContent = state.rows.length ? "Loaded " + state.rows.length + " records" : "";
+        }
+
+        function init() {
+            const seed = document.getElementById("seed").textContent;
+            state.rows = parse(seed);
+            setLoadedStatus();
+        }
+
+        document.getElementById("searchBtn").addEventListener("click", () => {
+            const nameQ = document.getElementById("nameInput").value;
+            const contactQ = document.getElementById("contactInput").value;
+            if (!state.rows.length) { alert("Dataset not loaded."); return; }
+            if (!nameQ.trim() || !contactQ.trim()) { alert("Enter both Name and Email/Phone."); return; }
+            const rows = state.rows.filter(r => nameMatches(r, nameQ) && contactMatches(r, contactQ));
+            const res = document.getElementById("result");
+            if (!rows.length) res.innerHTML = '<div class="warn">No match found.</div>';
+            else res.innerHTML = renderTable(rows);
+            document.getElementById("searchStatus").textContent = rows.length ? "Done" : "No results";
+        });
+
+        document.getElementById("clearBtn").addEventListener("click", () => {
+            document.getElementById("nameInput").value = "";
+            document.getElementById("contactInput").value = "";
+            document.getElementById("result").innerHTML = "";
+            document.getElementById("searchStatus").textContent = "";
+        });
+
+        init();
+    </script>
+</body>
+
+</html>
